@@ -5,47 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yaoj 居家健身系統化紀錄</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; line-height: 1.6; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; border: 1px solid #333; }
-        h1, h2 { color: #00f2ea; }
-        .todo-item { display: flex; align-items: center; margin-bottom: 15px; font-size: 1.1rem; }
-        input[type="checkbox"] { width: 20px; height: 20px; margin-right: 15px; cursor: pointer; }
-        button { background: #00f2ea; color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; line-height: 1.6; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 800px; }
+        .card { background: #1e1e1e; padding: 25px; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.5); margin-bottom: 25px; border: 1px solid #333; }
+        h1 { color: #00f2ea; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+        h2 { color: #00f2ea; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 0; }
+        
+        /* 新增圖片樣式 */
+        .summary-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+            border: 2px solid #333;
+            display: block;
+        }
+
+        .todo-item { display: flex; align-items: center; margin-bottom: 18px; font-size: 1.1rem; background: #2a2a2a; padding: 10px; border-radius: 8px; transition: background 0.3s; }
+        .todo-item:hover { background: #333; }
+        input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; cursor: pointer; accent-color: #00f2ea; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        button { flex: 1; background: #00f2ea; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: opacity 0.3s, transform 0.1s; }
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.98); }
         button:disabled { background: #444; color: #888; cursor: not-allowed; }
-        input[type="text"] { background: #333; border: 1px solid #555; color: white; padding: 8px; border-radius: 4px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #333; padding: 12px; text-align: left; }
-        th { background: #252525; color: #00f2ea; }
-        .status-done { color: #00ff00; font-weight: bold; }
+        button.calendar-btn { background: #fbbc04; color: #000; }
+        
+        input[type="text"], input[type="number"] { background: #333; border: 2px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; margin-bottom: 15px; font-size: 1rem; transition: border-color 0.3s; }
+        input[type="text"]:focus, input[type="number"]:focus { border-color: #00f2ea; outline: none; }
+
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #252525; color: #00f2ea; text-transform: uppercase; font-size: 0.9rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #2a2a2a; }
+        .status-done { color: #00ff00; font-weight: bold; display: flex; align-items: center; }
+        .status-done::before { content: '✓ '; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-    <h1>🏋️ Yaoj 系統化訓練紀錄</h1>
+    <div class="container">
+        <h1>🏋️ Yaoj 系統化訓練紀錄</h1>
 
-    <div class="card">
-        <h2>📅 今日課表 (12/31 版)</h2>
-        <div id="checklist">
-            <div class="todo-item"><input type="checkbox" class="task"> 彈力繩深蹲 (15下 x 4組)</div>
-            <div class="todo-item"><input type="checkbox" class="task"> 膝蓋伏地挺身 (12下 x 4組)</div>
-            <div class="todo-item"><input type="checkbox" class="task"> 彈力繩坐姿划船 (15下 x 4組)</div>
-            <div class="todo-item"><input type="checkbox" class="task"> 1kg 啞鈴側平舉 (20下 x 3組)</div>
-            <div class="todo-item"><input type="checkbox" class="task"> 彈力繩負重捲腹 (20下 x 3組)</div>
+        <img src="workout-summary.png" alt="Yaoj 居家健身系統化必修課圖表" class="summary-image">
+
+        <div class="card">
+            <h2>📅 今日必修課表 (沒做完不能存檔)</h2>
+            <div id="checklist">
+                <div class="todo-item"><input type="checkbox" class="task"> 彈力繩深蹲 (15下 x 4組)</div>
+                <div class="todo-item"><input type="checkbox" class="task"> 標準/跪姿伏地挺身 (12下 x 4組)</div>
+                <div class="todo-item"><input type="checkbox" class="task"> 彈力繩坐姿划船 (15下 x 4組)</div>
+                <div class="todo-item"><input type="checkbox" class="task"> 1kg 啞鈴側平舉 (20下 x 3組)</div>
+                <div class="todo-item"><input type="checkbox" class="task"> 彈力繩負重捲腹 (20下 x 3組)</div>
+            </div>
+            <input type="number" id="weight" placeholder="輸入今日體重 (kg)" step="0.1">
+            <div class="btn-group">
+                <button id="finishBtn" disabled onclick="saveRecord()">✅ 完課存檔</button>
+                <button class="calendar-btn" onclick="addToCalendar()">📅 加入 Google 日曆</button>
+            </div>
         </div>
-        <input type="text" id="weight" placeholder="輸入今日體重 (kg)">
-        <button id="finishBtn" disabled onclick="saveRecord()">✅ 完課存檔</button>
-        <button onclick="addToCalendar()">📅 加入 Google 日曆</button>
-    </div>
 
-    <div class="card">
-        <h2>🔍 歷史紀錄檢索</h2>
-        <input type="text" id="search" placeholder="搜尋日期或關鍵字..." onkeyup="renderLogs()">
-        <table id="logTable">
-            <thead>
-                <tr><th>日期</th><th>體重</th><th>狀態</th></tr>
-            </thead>
-            <tbody id="logBody"></tbody>
-        </table>
+        <div class="card">
+            <h2>🔍 歷史紀錄檢索</h2>
+            <input type="text" id="search" placeholder="搜尋日期或體重..." onkeyup="renderLogs()">
+            <table id="logTable">
+                <thead>
+                    <tr><th>日期</th><th>體重</th><th>狀態</th></tr>
+                </thead>
+                <tbody id="logBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -62,7 +95,14 @@
         // 存檔功能
         function saveRecord() {
             const date = new Date().toLocaleDateString();
-            const weight = weightInput.value || "未記錄";
+            const weight = weightInput.value;
+            
+            if (!weight) {
+                alert("請輸入今日體重！");
+                weightInput.focus();
+                return;
+            }
+
             const newLog = { date, weight, status: "已下課" };
             
             let logs = JSON.parse(localStorage.getItem('workoutLogs')) || [];
@@ -70,7 +110,12 @@
             localStorage.setItem('workoutLogs', JSON.stringify(logs));
             
             alert("辛苦了！數據已存入網頁。");
-            location.reload();
+            // 清空選項與輸入框
+            tasks.forEach(t => t.checked = false);
+            finishBtn.disabled = true;
+            weightInput.value = '';
+            renderLogs();
+            window.scrollTo(0, document.body.scrollHeight); // 捲動到歷史紀錄
         }
 
         // 渲染歷史紀錄
@@ -79,6 +124,11 @@
             const logs = JSON.parse(localStorage.getItem('workoutLogs')) || [];
             const logBody = document.getElementById('logBody');
             
+            if (logs.length === 0) {
+                logBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#888;">目前沒有紀錄，快去訓練吧！</td></tr>';
+                return;
+            }
+
             logBody.innerHTML = logs
                 .filter(log => log.date.includes(searchTerm) || log.weight.includes(searchTerm))
                 .map(log => `<tr><td>${log.date}</td><td>${log.weight} kg</td><td class="status-done">${log.status}</td></tr>`)
@@ -87,8 +137,8 @@
 
         // Google 日曆連結
         function addToCalendar() {
-            const title = encodeURIComponent("Yaoj 居家訓練時間");
-            const details = encodeURIComponent("今日課表：深蹲、伏地挺身、划船、側平舉、捲腹。務必達成才能下課！");
+            const title = encodeURIComponent("🏋️ Yaoj 居家健身必修課 (務必下課)");
+            const details = encodeURIComponent("今日課表：\n1. 彈力繩深蹲 (15x4)\n2. 伏地挺身 (12x4)\n3. 彈力繩划船 (15x4)\n4. 啞鈴側平舉 (20x3)\n5. 彈力繩捲腹 (20x3)\n\n口號：建設 • 破壞 • 重複堆疊 = 變強！");
             const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}`;
             window.open(url, '_blank');
         }
